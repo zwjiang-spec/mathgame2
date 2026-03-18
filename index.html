@@ -410,6 +410,8 @@
       body.hell-theme .check-item {
         color: #ccc;
       }
+      <script src="https://www.gstatic.com/firebasejs/12.10.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.10.0/firebase-auth-compat.js"></script>
     </style>
   </head>
   <body>
@@ -450,7 +452,12 @@
 
     <div class="main-container">
       <h1><span class="teacher"></span>數學領域展開</h1>
-
+      <div id="user-info" style="margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-radius: 12px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+        <span id="user-name-display" style="font-weight: bold; color: #2c3e50; font-size: 15px;">👤 尚未登入</span>
+        <button id="auth-btn" onclick="toggleLogin()" style="background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);">
+          Google 登入
+        </button>
+      </div>
       <div class="tabs">
         <button
           class="tab-btn active"
@@ -821,6 +828,58 @@
         loadTopScore(HELL_SPACE_CSV, "top-hell-space", 1);
         loadTopScore(HELL_PERM_CSV, "top-hell-perm", 1);
       };
+      // ==========================================
+      // 🚀 Firebase 雲端登入系統
+      // ==========================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyC7ed0il_ScCdHeWOHepj56ycjRXYt_Mf4",
+        authDomain: "mathgame-6ab85.firebaseapp.com",
+        projectId: "mathgame-6ab85",
+        storageBucket: "mathgame-6ab85.firebasestorage.app",
+        messagingSenderId: "790458098592",
+        appId: "1:790458098592:web:298e23dbb8ba82a3ee3ac5"
+      };
+
+      // 初始化 Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const provider = new firebase.auth.GoogleAuthProvider();
+
+      // 監聽玩家的登入狀態
+      auth.onAuthStateChanged(user => {
+        const nameDisplay = document.getElementById('user-name-display');
+        const authBtn = document.getElementById('auth-btn');
+
+        if (user) {
+          // 🟢 已登入：顯示名字、頭像，按鈕變成登出
+          nameDisplay.innerHTML = `<img src="${user.photoURL}" style="width:24px; height:24px; border-radius:50%; vertical-align:middle; margin-right:8px;"> ${user.displayName}`;
+          authBtn.innerText = '登出';
+          authBtn.style.background = '#e74c3c';
+          authBtn.style.boxShadow = '0 2px 5px rgba(231, 76, 60, 0.3)';
+          
+          // ✨ 把名字偷偷存在瀏覽器裡，之後遊戲頁面可以直接抓！
+          localStorage.setItem('mathGamePlayerName', user.displayName);
+          localStorage.setItem('mathGamePlayerUid', user.uid);
+        } else {
+          // 🔴 未登入：恢復原狀
+          nameDisplay.innerHTML = '👤 尚未登入';
+          authBtn.innerText = 'Google 登入';
+          authBtn.style.background = '#3498db';
+          authBtn.style.boxShadow = '0 2px 5px rgba(52, 152, 219, 0.3)';
+          
+          localStorage.removeItem('mathGamePlayerName');
+          localStorage.removeItem('mathGamePlayerUid');
+        }
+      });
+
+      // 點擊按鈕執行登入或登出
+      function toggleLogin() {
+        if (auth.currentUser) {
+          if(confirm("確定要登出嗎？")) auth.signOut();
+        } else {
+          auth.signInWithPopup(provider).catch(error => alert("登入失敗：" + error.message));
+        }
+      }
     </script>
   </body>
 </html>
