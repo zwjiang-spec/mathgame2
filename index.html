@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>超級爆裂數學領域展開遊戲</title>
+    <meta
+      name="google-site-verification"
+      content="2HNqPr4ww0fFYXswBNxfz88fzcYRc_H6aegyCafNEf0"
+    />
+    <meta name="description" content="史上最好玩的數學小遊戲" />
+    <meta
+      name="keywords"
+      content="高中數學, 數學遊戲, 三角函數, 空間坐標, 江子緯老師, 數學練習, 學測數學"
+    />
+    <meta property="og:title" content="超級爆裂數學領域展開遊戲" />
+    <meta
+      property="og:description"
+      content="超刺激的數學闖關遊戲，三角比、空間坐標、排列組合等你來挑戰！"
+    />
+    <meta property="og:type" content="website" />
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background-color: #f7f9fc;
+        background-image: linear-gradient(
+            rgba(155, 89, 182, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(155, 89, 182, 0.03) 1px, transparent 1px),
+          url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5YjU5YjYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTAgMGg0MHY0MEgwVjB6bTIwIDIwaDIwdjIwSDIWMjB6TTAgMjBoMjB2MjBIMFYyMHoyMCAwaDIwdjIwaC0yMFYweiIvPjwvZz48L2c+PC9zdmc+");
+        background-size: 20px 20px, 20px 20px, 40px 40px;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100dvh;
+        width: 100vw;
+        color: #2c3e50;
+        overflow: hidden;
+      }
+
+      .main-container {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.98);
+        padding: 30px 25px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        max-width: 90%;
+        width: 400px;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      h1 {
+        font-size: 30px;
+        font-weight: 800;
+        margin-bottom: 20px;
+        color: #1c2833;
+        letter-spacing: 2px;
+      }
+      h1 .teacher {
+        font-size: 0.55em;
+        color: #9b59b6;
+        display: block;
+        letter-spacing: normal;
+      }
+
+      /* ✨ 模式切換頁籤樣式 (改為三個) */
+      .tabs {
+        display: flex;
+        background: #e0e0e0;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        overflow: hidden;
+      }
+      .tab-btn {
+        flex: 1;
+        padding: 10px 5px;
+        border: none;
+        background: none;
+        font-size: 14px; /* 稍微縮小字體以容納三個按鈕 */
+        font-weight: bold;
+        color: #7f8c8d;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .tab-btn.active {
+        background: #2c3e50;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      /* 地獄模式按鈕被選中時的特殊顏色 */
+      #btn-hell.active {
+        background: #c0392b;
+        color: white;
+      }
+
+      .content-section {
+        display: none;
+        flex-direction: column;
+        gap: 15px;
+        animation: fadeIn 0.3s;
+      }
+      .content-section.active {
+        display: flex;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .menu-btn {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-decoration: none;
+        padding: 16px 20px;
+        border-radius: 12px;
+        color: white;
+        font-size: 17px;
+        font-weight: 700;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .menu-btn:active {
+        transform: scale(0.96);
+      }
+
+      .btn-trig {
+        background-color: #27ae60;
+        box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+      }
+      .btn-trig:hover {
+        background-color: #219150;
+      }
+      .btn-space {
+        background-color: #9b59b6;
+        box-shadow: 0 4px 10px rgba(155, 89, 182, 0.3);
+      }
+      .btn-space:hover {
+        background-color: #8e44ad;
+      }
+      .btn-perm {
+        background-color: #16a085;
+        box-shadow: 0 4px 10px rgba(22, 160, 133, 0.3);
+      }
+      .btn-perm:hover {
+        background-color: #117a65;
+      }
+      .btn-practice {
+        background-color: #e67e22;
+        box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
+        justify-content: center;
+        font-size: 18px;
+      }
+      .btn-practice:hover {
+        background-color: #d35400;
+      }
+
+      .btn-locked {
+        background-color: #e0e0e0;
+        color: #95a5a6;
+        cursor: not-allowed;
+        pointer-events: none;
+        border: 2px dashed #bdc3c7;
+      }
+      .btn-locked .level-icon {
+        filter: grayscale(1);
+        opacity: 0.6;
+      }
+
+      .btn-text {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .level-icon {
+        font-size: 1.3em;
+      }
+      .btn-arrow {
+        font-size: 1.2em;
+        opacity: 0.7;
+      }
+
+      /* ✨ 獨立的地獄卡片專屬樣式 */
+      .btn-hell-theme {
+        background: #1a1a1a !important;
+        border: 2px solid #c0392b;
+        box-shadow: 0 0 15px rgba(192, 57, 43, 0.4);
+      }
+      .btn-hell-theme .btn-text,
+      .btn-hell-theme .btn-arrow {
+        color: #ff4d4d;
+      }
+      .btn-hell-theme:hover {
+        background: #000000 !important;
+        box-shadow: 0 0 20px rgba(192, 57, 43, 0.8);
+      }
+
+      /* ✨ 勾選框樣式 */
+      .checkbox-group {
+        text-align: left;
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-radius: 12px;
+        border: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 5px;
+      }
+      .check-item {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        font-weight: bold;
+        color: #34495e;
+        cursor: pointer;
+      }
+      .check-item input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-right: 12px;
+        cursor: pointer;
+        accent-color: #e67e22;
+      }
+
+      #credit {
+        font-size: 12px;
+        color: #bdc3c7;
+        margin-top: 25px;
+      }
+
+      #version-btn {
+        position: fixed;
+        bottom: 15px;
+        left: 15px;
+        background: rgba(44, 62, 80, 0.8);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 50;
+      }
+      #version-btn:hover {
+        background: rgba(44, 62, 80, 1);
+        transform: scale(1.05);
+      }
+      #update-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 200;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+      }
+      #update-modal.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-content {
+        background: white;
+        width: 85%;
+        max-width: 450px;
+        border-radius: 15px;
+        padding: 25px;
+        position: relative;
+        max-height: 80vh;
+        overflow-y: auto;
+        text-align: left;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+      .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #95a5a6;
+        transition: 0.2s;
+      }
+      .close-btn:hover {
+        color: #e74c3c;
+      }
+      .modal-content h2 {
+        margin-top: 0;
+        color: #2c3e50;
+        font-size: 22px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+      }
+      .update-item {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed #eee;
+      }
+      .version-tag {
+        background: #3498db;
+        color: white;
+        padding: 3px 8px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 5px;
+      }
+      .date-tag {
+        color: #7f8c8d;
+        font-size: 13px;
+      }
+      .update-item ul {
+        margin: 10px 0 0 0;
+        padding-left: 20px;
+        font-size: 15px;
+        color: #444;
+        line-height: 1.6;
+      }
+
+      /* ✨ 意見回饋懸浮按鈕 */
+      .feedback-btn {
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+        background: #f39c12;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: bold;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(243, 156, 18, 0.4);
+        transition: all 0.2s;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .feedback-btn:hover {
+        background: #e67e22;
+        transform: scale(1.05) translateY(-2px);
+        box-shadow: 0 6px 15px rgba(243, 156, 18, 0.6);
+      }
+      /* ✨ 💀 領域展開：全網頁地獄主題變色特效 */
+      body {
+        transition: background-color 0.5s ease, background-image 0.5s ease;
+      }
+      .main-container,
+      h1,
+      .tabs,
+      .tab-btn {
+        transition: all 0.5s ease;
+      }
+
+      body.hell-theme {
+        background-color: #050000;
+        background-image: linear-gradient(
+            rgba(192, 57, 43, 0.08) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(192, 57, 43, 0.08) 1px, transparent 1px);
+      }
+      body.hell-theme .main-container {
+        background: rgba(15, 5, 5, 0.95);
+        box-shadow: 0 10px 40px rgba(192, 57, 43, 0.4);
+        border: 1px solid #5a1010;
+      }
+      body.hell-theme h1 {
+        color: #ff4d4d;
+        text-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
+      }
+      body.hell-theme .tabs {
+        background: #1a1a1a;
+      }
+      body.hell-theme .tab-btn {
+        color: #7f8c8d;
+      }
+      body.hell-theme .tab-btn.active {
+        background: #c0392b;
+        color: white;
+        box-shadow: 0 4px 10px rgba(192, 57, 43, 0.5);
+      }
+      body.hell-theme .checkbox-group {
+        background: #111;
+        border-color: #333;
+      }
+      body.hell-theme .check-item {
+        color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="version-btn" onclick="toggleUpdateLog()">v2.5.0 更新日誌</div>
+
+    <a
+      href="https://forms.gle/pDzjWcsPBi2pwJ869"
+      target="_blank"
+      class="feedback-btn"
+    >
+      💡 意見回饋
+    </a>
+    <div id="update-modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="toggleUpdateLog()">×</span>
+        <h2>🚀 版本更新日誌</h2>
+        <div class="update-item">
+          <span class="version-tag">v2.5.0</span>
+          <span class="date-tag">史詩級大升級！</span>
+          <ul>
+            <li>
+              <b style="color: #f39c12">大廳榮譽榜：</b
+              >各單元首頁新增「金銀銅」前三名專屬標籤，展現神人霸榜實力！
+            </li>
+            <li>
+              <b style="color: #2980b9">體驗大幅升級：</b>右上角新增「🚪
+              退出」按鈕；結算畫面自動隱藏輸入框，徹底根除誤觸覆蓋名字的問題。
+            </li>
+            <li>
+              <b style="color: #ff0000">錯題本提示：</b
+              >錯誤的題目在結束後會提供答案與提示，解題不求人！
+            </li>
+            <li>修復了一些煩人的蟲子。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-container">
+      <h1><span class="teacher"></span>數學領域展開</h1>
+
+      <div class="tabs">
+        <button
+          class="tab-btn active"
+          onclick="switchTab('ranked')"
+          id="btn-ranked"
+        >
+          🏆 單元競賽
+        </button>
+        <button class="tab-btn" onclick="switchTab('hell')" id="btn-hell">
+          💀 地獄模式
+        </button>
+        <button
+          class="tab-btn"
+          onclick="switchTab('practice')"
+          id="btn-practice"
+        >
+          💪 綜合練習
+        </button>
+      </div>
+
+      <div id="content-ranked" class="content-section active">
+        <div
+          onclick="window.location.href='trig.html?mode=normal'"
+          class="menu-btn btn-trig"
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              text-align: left;
+              gap: 4px;
+              width: 100%;
+            "
+          >
+            <div class="btn-text">
+              <span class="level-icon"></span> 超好玩的三角比
+            </div>
+            <div
+              id="top-trig"
+              style="
+                font-size: 13px;
+                font-weight: normal;
+                color: rgba(255, 255, 255, 0.9);
+              "
+            >
+              👑 最高紀錄：讀取中...
+            </div>
+          </div>
+          <div class="btn-arrow">▶</div>
+        </div>
+        <div
+          onclick="window.location.href='space.html?mode=normal'"
+          class="menu-btn btn-space"
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              text-align: left;
+              gap: 4px;
+              width: 100%;
+            "
+          >
+            <div class="btn-text">
+              <span class="level-icon"></span> 有趣的坐標
+            </div>
+            <div
+              id="top-space"
+              style="
+                font-size: 13px;
+                font-weight: normal;
+                color: rgba(255, 255, 255, 0.9);
+              "
+            >
+              👑 最高紀錄：讀取中...
+            </div>
+          </div>
+          <div class="btn-arrow">▶</div>
+        </div>
+        <div
+          onclick="window.location.href='perm.html?mode=normal'"
+          class="menu-btn btn-perm"
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              text-align: left;
+              gap: 4px;
+              width: 100%;
+            "
+          >
+            <div class="btn-text">
+              <span class="level-icon"></span> 神奇的排列組合
+            </div>
+            <div
+              id="top-perm"
+              style="
+                font-size: 13px;
+                font-weight: normal;
+                color: rgba(255, 255, 255, 0.9);
+              "
+            >
+              👑 最高紀錄：讀取中...
+            </div>
+          </div>
+          <div class="btn-arrow">▶</div>
+        </div>
+        <div class="menu-btn btn-locked">
+          <div class="btn-text">
+            <span class="level-icon">🔒</span> 敬請期待...
+          </div>
+        </div>
+      </div>
+
+      <div id="content-hell" class="content-section">
+        <div
+          onclick="window.location.href='trig.html?mode=hell'"
+          class="menu-btn btn-hell-theme"
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              text-align: left;
+              gap: 4px;
+              width: 100%;
+            "
+          >
+            <div class="btn-text">
+              <span class="level-icon">💀</span> 死亡廣義三角比
+            </div>
+            <div
+              id="top-hell-trig"
+              style="font-size: 13px; font-weight: normal; color: #e74c3c"
+            >
+              👑 地獄霸主：讀取中...
+            </div>
+          </div>
+          <div class="btn-arrow">▶</div>
+        </div>
+        <div
+          onclick="window.location.href='space.html?mode=hell'"
+          class="menu-btn btn-hell-theme"
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              text-align: left;
+              gap: 4px;
+              width: 100%;
+            "
+          >
+            <div class="btn-text">
+              <span class="level-icon">💀</span> 虛無的空間坐標(開發中)
+            </div>
+            <div
+              id="top-hell-space"
+              style="font-size: 13px; font-weight: normal; color: #e74c3c"
+            >
+              👑 地獄霸主：讀取中...
+            </div>
+          </div>
+          <div class="btn-arrow">▶</div>
+        </div>
+        <div
+          onclick="window.location.href='perm.html?mode=hell'"
+          class="menu-btn btn-hell-theme"
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              text-align: left;
+              gap: 4px;
+              width: 100%;
+            "
+          >
+            <div class="btn-text">
+              <span class="level-icon">💀</span> 混沌的排列組合(開發中)
+            </div>
+            <div
+              id="top-hell-perm"
+              style="font-size: 13px; font-weight: normal; color: #e74c3c"
+            >
+              👑 地獄霸主：讀取中...
+            </div>
+          </div>
+          <div class="btn-arrow">▶</div>
+        </div>
+      </div>
+
+      <div id="content-practice" class="content-section">
+        <p style="margin-bottom: 10px; color: #e67e22; font-weight: bold">
+          自由勾選想混合練習的單元：
+        </p>
+        <div class="checkbox-group">
+          <label class="check-item"
+            ><input type="checkbox" id="chk-trig" checked />
+            超好玩的三角比</label
+          >
+          <label class="check-item"
+            ><input type="checkbox" id="chk-space" checked />
+            有趣的空間坐標</label
+          >
+          <label class="check-item"
+            ><input type="checkbox" id="chk-perm" checked />
+            神奇的排列組合</label
+          >
+        </div>
+        <button class="menu-btn btn-practice" onclick="startPractice()">
+          🔥 開始綜合練習
+        </button>
+      </div>
+
+      <div id="credit">Powered by 江子緯老師</div>
+    </div>
+
+    <script>
+      function toggleUpdateLog() {
+        const modal = document.getElementById("update-modal");
+        modal.classList.contains("show")
+          ? modal.classList.remove("show")
+          : modal.classList.add("show");
+      }
+
+      // ✨ 更新為支援三個頁籤的切換邏輯
+      // ✨ 更新為支援三個頁籤與「地獄領域展開」的切換邏輯
+      function switchTab(tabId) {
+        ["ranked", "hell", "practice"].forEach((id) => {
+          document.getElementById("btn-" + id).classList.remove("active");
+          document.getElementById("content-" + id).classList.remove("active");
+        });
+        document.getElementById("btn-" + tabId).classList.add("active");
+        document.getElementById("content-" + tabId).classList.add("active");
+
+        // 💀 判斷是否點擊了地獄模式，如果是，給 body 加上黑化標籤
+        if (tabId === "hell") {
+          document.body.classList.add("hell-theme");
+        } else {
+          document.body.classList.remove("hell-theme");
+        }
+      }
+
+      function startPractice() {
+        let selectedModes = [];
+        if (document.getElementById("chk-trig").checked)
+          selectedModes.push("trig");
+        if (document.getElementById("chk-space").checked)
+          selectedModes.push("space");
+        if (document.getElementById("chk-perm").checked)
+          selectedModes.push("perm");
+
+        if (selectedModes.length === 0) {
+          alert("⚠️ 請至少勾選一個單元才能開始練習喔！");
+          return;
+        }
+        window.location.href = `practice.html?modes=${selectedModes.join(",")}`;
+      }
+
+      // ==========================================
+      // 📊 排行榜資料庫 (CSV 網址區)
+      // ==========================================
+
+      // 一般模式的 CSV
+      const TRIG_CSV =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT9XgS9MSIF9LZNzTT0e7xJQnNwTsNmorofMhSKGAb_13mRfx_HN02TC2Uc9ohGCn_nkjLNTIFRRCBB/pub?output=csv";
+      const SPACE_CSV =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vQppbAjVhqnWfWyCpo8hHWhaMe5KhL3aQZIDFNL-Kkekub-Mn5gZmTbTa-1Tn0Qu3EsUs3oIUV0tXTw/pub?output=csv";
+      const PERM_CSV =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwQuA4SuPuNdHk6sUV9yyOU9g6z7uKNqIPsQw0Rj8u8g6-2WTLRMW-oeFhLRbiw2v7Oiz8v2g1XwNP/pub?output=csv";
+
+      // 💀 地獄模式的 CSV (老師你之後要幫地獄模式建新的 Google 表單，再把 CSV 貼過來替換這三行)
+      // 目前先暫時用一般的資料庫代替，免得顯示空白
+      const HELL_TRIG_CSV = TRIG_CSV;
+      const HELL_SPACE_CSV = SPACE_CSV;
+      const HELL_PERM_CSV = PERM_CSV;
+
+      function parseCSV(text) {
+        let p = "",
+          row = [""],
+          ret = [row],
+          i = 0,
+          r = 0,
+          s = !0,
+          l;
+        for (l of text) {
+          if ('"' === l) {
+            if (s && l === p) row[i] += l;
+            s = !s;
+          } else if ("," === l && s) l = row[++i] = "";
+          else if ("\n" === l && s) {
+            if ("\r" === p) row[i] = row[i].slice(0, -1);
+            row = ret[++r] = [(l = "")];
+            i = 0;
+          } else row[i] += l;
+          p = l;
+        }
+        return ret;
+      }
+
+      // ✨ 進化版 loadTopScore：加入 limit 參數控制顯示人數
+      async function loadTopScore(url, elementId, limit = 3) {
+        const el = document.getElementById(elementId);
+        try {
+          let res = await fetch(url + "&t=" + new Date().getTime(), {
+            cache: "no-store",
+          });
+          let text = await res.text();
+          let data = parseCSV(text);
+
+          let records = [];
+          for (let i = 1; i < data.length; i++) {
+            if (data[i].length >= 3) {
+              let nameRaw = data[i][1] || "";
+              let scoreRaw = parseInt(data[i][2]);
+              if (isNaN(scoreRaw)) continue;
+              let cleanName = nameRaw
+                .split(" (錯題:")[0]
+                .split(" (全對")[0]
+                .split(" (死亡")[0]
+                .trim();
+              records.push({ name: cleanName, score: scoreRaw });
+            }
+          }
+
+          // 依照分數排序並依照 limit 取前幾名
+          let topList = records
+            .sort((a, b) => b.score - a.score)
+            .slice(0, limit);
+
+          if (topList.length > 0) {
+            let html = `<div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px;">`;
+            let medals = ["🥇", "🥈", "🥉"];
+            let colors = ["#ffd700", "#e0e0e0", "#ffb07c"];
+
+            topList.forEach((player, index) => {
+              // 為了地獄模式的第一名加上皇冠
+              let icon = limit === 1 ? "👑" : medals[index];
+              let textColor = limit === 1 ? "#ff4d4d" : colors[index];
+
+              html += `<div style="background: rgba(0, 0, 0, 0.15); padding: 3px 6px; border-radius: 6px; font-size: 11px; display: flex; align-items: center; gap: 4px; border: 1px solid rgba(255,255,255,0.1);">
+                         ${icon}
+                         <span style="max-width: 55px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: white;" title="${player.name}">${player.name}</span>
+                         <span style="color: ${textColor}; font-weight: bold;">${player.score}</span>
+                       </div>`;
+            });
+            html += `</div>`;
+            el.innerHTML = html;
+          } else {
+            el.innerHTML = `👑 尚無挑戰者`;
+          }
+        } catch (e) {
+          el.innerHTML = `👑 讀取失敗，請重新整理`;
+        }
+      }
+
+      // 網頁載入時立刻抓資料
+      window.onload = () => {
+        // 一般模式 (取前 3 名)
+        loadTopScore(TRIG_CSV, "top-trig", 3);
+        loadTopScore(SPACE_CSV, "top-space", 3);
+        loadTopScore(PERM_CSV, "top-perm", 3);
+
+        // 地獄模式 (只取第 1 名)
+        loadTopScore(HELL_TRIG_CSV, "top-hell-trig", 1);
+        loadTopScore(HELL_SPACE_CSV, "top-hell-space", 1);
+        loadTopScore(HELL_PERM_CSV, "top-hell-perm", 1);
+      };
+    </script>
+  </body>
+</html>
